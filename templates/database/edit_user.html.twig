@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit an user{% endblock %}
+
+{% block body %}
+
+{% block style %}
+        <link rel="stylesheet" href="{{ asset('db_edit_user.css') }}">
+{% endblock %}
+
+    <div> {{ form_start(form) }} </div>
+        <div id="edit">
+            <h1 class="text-info">Edit an user</h1>
+            <div id="name" class="text-info">
+                {{ form_row(form.username) }}
+            </div>
+            <div id="email" class="text-info">
+                {{ form_row(form.email) }}
+            </div>
+            <div id="roles" class="text-info">
+                {{ form_row(form.roles) }}
+            </div>
+            <div id="company" class="text-info">
+                {{ form_row(form.company) }}
+            </div>
+            <div id="applications" class="text-info">
+                {{ form_row(form.applications) }}
+            </div>
+            <div id="" class="text-info">
+                {{ form_row(form.Advertisements) }}
+            </div>
+            <div id="submit">
+                <button type="submit" class="btn btn-primary" style="margin-top: 8px;">Apply changes</button>
+            </div>
+        </div>
+    <div> {{ form_end(form) }} </div>
+{% endblock %}

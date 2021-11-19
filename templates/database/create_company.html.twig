@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create a company{% endblock %}
+
+{% block body %}
+
+{% block style %}
+        <link rel="stylesheet" href="{{ asset('db_create_company.css') }}">
+{% endblock %}
+
+    <div id="create">
+        <h2 class="text-info text-center">Create a company</h2>
+        <div>
+            {{ form_start(form) }}
+        </div>
+        <div id="name" class="text-info">
+            {{ form_row(form.name) }}
+        <div>
+        <div id="submit">
+            <button type="submit" class="btn btn-primary">Create</button>
+        </div>
+        <div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,160 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Job Board!{% endblock %}
+
+{% block body %}
+
+{% block style %}
+        <link rel="stylesheet" href="{{ asset('index_ad.css') }}">
+{% endblock %}
+
+<header class="masthead">
+    <div class="container">
+        <div class="intro-text">
+            <div id="title" class="intro-lead-in text-center">Welcome to Job Board!</div>
+        </div>
+    </div>
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+        <div id="status" class="container">
+            <div class="intro-text">
+                <div class="intro-lead-in text-center">Connected as <b>{{ app.user.username }}</b></div>
+            </div>
+        </div>
+    {% else %}
+        <div id="status" class="container">
+            <div class="intro-text">
+                <div class="intro-lead-in text-center">Not connected</div>
+            </div>
+        </div>
+    {% endif %}
+</header>
+    <div id="accounts">
+        {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        <a href="/login" class="btn btn-primary btn-xl text-uppercase" style="margin-top: 8px; margin-bottom: 6px;">Login</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        <a href="/register" class="btn btn-primary btn-xl text-uppercase">Register</a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        <a href="/logout" class="btn btn-primary btn-xl text-uppercase" style="margin-top: 8px;">Logout</a>
+                    </div>
+                </div>
+        {% endif %}
+    </div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <i class="fa fa-fw fa-table"></i>
+                        Advertisements
+                    </h3>
+                </div>
+                <div id="list" class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                    {% if is_granted('ROLE_ADMIN') %}
+                                        <th class="text-center">ID</th>
+                                    {% endif %}
+                                        <th class="text-center">Title</th>
+                                        <th class="text-center">Description</th>
+                                        <th class="text-center">Posted by</th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for ad in ads %}
+                                        <tr>
+                                        {% if is_granted('ROLE_ADMIN') %}
+                                            <td class="text-center">{{ ad.id }}</td>
+                                        {% else %}
+                                            <td class="text-center" style="display: none;">{{ ad.id }}</td>
+                                        {% endif %}
+                                            <td class="text-uppercase text-center"><strong>{{ ad.title }}</strong></td>
+                                            <td class="text-center"><em>{{ ad.description }}</em></td>
+                                            <td class="text-center">{{ ad.creator.username }}</td>
+                                            <td>
+                                                <a class="btn btn-primary action" style="margin-bottom: 3px;">Learn more</a>
+                                                <a href="{{ path('ad_apply', { 'id': ad.id }) }}" class="btn btn-primary" style="margin-bottom: 3px;">Apply</a>
+                                                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                                    {% if app.user is same as ad.creator or is_granted('ROLE_ADMIN') %}
+                                                        <a href ="{{ path('ad_edit', { 'id' : ad.id }) }}"class="btn btn-warning" style="margin-bottom: 3px;">Edit</a>
+                                                        <a href="{{ path('ad_remove', { 'id': ad.id }) }}" class="btn btn-danger">Delete</a>
+                                                    {% endif %}
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            <div class="text-center">
+                                {% if is_granted('ROLE_ADVERTISER') or is_granted('ROLE_ADMIN') %}
+                                    <a href="/ad/create" class="btn btn-primary">Create an advertisement</a>
+                                    <a href="/company/create" class="btn btn-secondary">Create a company</a>
+                                {% endif %}
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <a href="/database" class="btn btn-danger">Administration</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer>
+    <div class="container" style="margin-top: 10px;">
+        <div class="row">
+            <div id="copyright" class="col-md-4">
+                <span class="copyright">Copyright &copy; Job Board 2021</span>
+            </div>
+            <div id="privacy" class="col-md-4">
+                <ul class="list-inline quicklinks">
+                    <li class="list-inline-item">
+                        <a href="#">Privacy Policy</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="#">Terms of Use</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+<script>
+    $('.action').click(function() {
+        var ad_id = $(this).parent().parent().find('td:first').text();
+        $.ajax({
+            url: '/ad/learn_more/' + ad_id,
+            type: 'POST',
+            data: {
+                'ad_id': ad_id
+            },
+            success: function(data) {
+                var keys = Object.keys(data);
+                var html = '';
+                for (var i = 0; i < keys.length; i++) {
+                    html += '<div class="row"><div class="col-md-12"><strong>' + keys[i] + '</strong></div></div>';
+                    html += '<div class="row"><div class="col-md-12">' + data[keys[i]] + '</div></div>';
+                }
+                $('#list').html(html);
+                $('#list').append('<div class="row text-center"><div class="col-md-12"><a href="/" class="btn btn-primary">Back to the list</a></div></div>');
+            }
+        });
+    });
+</script>
+{% endblock %}

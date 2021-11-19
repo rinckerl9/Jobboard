@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create an user{% endblock %}
+
+{% block body %}
+
+{% block style %}
+        <link rel="stylesheet" href="{{ asset('db_create_user.css') }}">
+{% endblock %}
+
+    <div> {{ form_start(form) }} </div>
+        <div id="register">
+            <h1 class="text-info">Create an user</h1>
+            <div id="name" class="text-info">
+                {{ form_row(form.username) }}
+            </div>
+            <div id="password" class="text-info">
+                {{ form_row(form.plainPassword, {
+                    label: 'Password'
+                }) }}
+            </div>
+            <div id="email" class="text-info">
+                {{ form_row(form.email) }}
+            </div>
+            <div id="roles" class="text-info">
+                {{ form_row(form.roles) }}
+            </div>
+            <div id="terms" class="text-info">
+                {{ form_row(form.agreeTerms) }}
+            </div>
+            {# {{ form_row(form.company) }} #}
+            <div id="submit">
+                <button type="submit" class="btn btn-primary" style="margin-top: 8px;">Create</button>
+            </div>
+        </div>
+    <div> {{ form_end(form) }} </div>
+{% endblock %}

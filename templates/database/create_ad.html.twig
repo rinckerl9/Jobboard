@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create an ad{% endblock %}
+
+{% block body %}
+
+{% block style %}
+        <link rel="stylesheet" href="{{ asset('db_create_ad.css') }}">
+{% endblock %}
+    <div id="edit">
+        <h1 class="text-info">Create an ad</h1>
+
+    <div> {{ form_start(form) }} </div>
+    <div id="ad_title" class="text-info">
+        {{ form_row(form.title) }}
+    </div>
+    <div id="description" class="text-info">
+        {{ form_row(form.description) }}
+    <div>
+    <div id="salary" class="text-info">
+        {{ form_row(form.salary) }}
+    </div>
+    <div id="location" class="text-info">
+        {{ form_row(form.location) }}
+    </div>
+    <div id="company" class="text-info">
+        {{ form_row(form.company) }}
+    </div>
+    <div id="submit">
+        <button type="submit" class="btn btn-primary">Create</button>
+    </div>
+    <div> {{ form_end(form) }} </div>
+{% endblock %}

@@ -1,0 +1,140 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin panel{% endblock %}
+
+{% block body %}
+
+{% block style %}
+        <link rel="stylesheet" href="{{ asset('index_db.css') }}">
+{% endblock %}
+
+<h1 id="title"> Users </h1>
+<div id="list">
+    <table class="table table-bordered table-hover users-table">
+        <thead>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Roles</th>
+            <th>Actions</th>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.company }}</td>
+                    <td>
+                    {% for role in user.roles %}
+                        {{ role }}{% if not loop.last %}<br>{% endif %}
+                    {% endfor %}
+                    </td>
+                    <td>
+                    {% for application in user.applications %}
+                        {{ application }}{% if not loop.last %}<br>{% endif %}
+                    {% endfor %}
+                    </td>
+                    <td>
+                    {% for advertisement in user.Advertisements %}
+                        {{ advertisement }}{% if not loop.last %}<br>{% endif %}
+                    {% endfor %}
+                    </td>
+                    <td>
+                    <a href="{{ path('database_user_delete', { 'id': user.id }) }}" class="btn btn-danger user-delete" style="margin-top: 2px;">Delete</a>
+                    {# <a class="btn btn-warning user-edit" data-id="{{ user.id }}">Edit</a> #}
+                    <a href="{{ path('database_user_edit', { 'id': user.id }) }}" class="btn btn-warning user-edit" style="margin-top: 2px;">Edit</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ path('database_user_create') }}" class="btn btn-success user-create">Create</a><br><br>
+</div>
+<h1 id="title"> Companies </h1>
+<div id="list">
+    <table class="table table-bordered table-hover companies-table">
+        <thead>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Employees</th>
+            <th>Ads</th>
+            <th>Actions</th>
+        </thead>
+        <tbody>
+            {% for company in companies %}
+                <tr>
+                    <td>{{ company.id }}</td>
+                    <td>{{ company.name }}</td>
+                    <td>
+                    {% for employee in company.employees %}
+                        {{ employee }}{% if not loop.last %}<br>{% endif %}
+                    {% endfor %}
+                    </td>
+                    <td>
+                    {% for ad in company.ads %}
+                        {{ ad }}{% if not loop.last %}<br>{% endif %}
+                    {% endfor %}
+                    </td>
+                    <td>
+                    <a href="{{ path('database_company_delete', { 'id': company.id }) }}" class="btn btn-danger company-delete" style="margin-top: 2px;">Delete</a>
+                    {# <a class="btn btn-warning company-edit" data-id="{{ company.id }}">Edit</a> #}
+                    <a href="{{ path('database_company_edit', { 'id': company.id }) }}" class="btn btn-warning company-edit" style="margin-top: 2px;">Edit</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ path('database_company_create') }}" class="btn btn-success company-create">Create</a><br><br>
+</div>
+
+<h1 id="title"> Advertisements </h1>
+<div id="list" style="margin-bottom: 10px;">
+    <table class="table table-bordered table-hover ads-table">
+        <thead>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Company</th>
+            <th>Applicants</th>
+            <th>Salary</th>
+            <th>Location</th>
+            <th>Creator</th>
+            <th>Actions</th>
+        </thead>
+        <tbody>
+            {% for ad in ads %}
+                <tr>
+                    <td>{{ ad.id }}</td>
+                    <td>{{ ad.title }}</td>
+                    <td>{{ ad.description }}</td>
+                    <td>{{ ad.company }}</td>
+                    <td>
+                    {% for applicant in ad.applicants %}
+                        {{ applicant }}{% if not loop.last %}<br>{% endif %}
+                    {% endfor %}
+                    </td>
+                    <td>{{ ad.Salary }}</td>
+                    <td>{{ ad.Location }}</td>
+                    <td>{{ ad.creator }}</td>
+                    <td>
+                    <a href="{{ path('database_ad_delete', { 'id': ad.id }) }}" class="btn btn-danger ad-delete" style="margin-top: 2px;">Delete</a>
+                    <a href="{{ path('database_ad_edit', { 'id': ad.id }) }}" class="btn btn-warning ad-edit" style="margin-top: 2px;">Edit</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('database_ad_create') }}" class="btn btn-success ad-create">Create</a><br><br>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{# <script>
+    $(document).ready(() => {
+        $('.user-edit').click((e) => {
+            let target = $(e.target);
+            let id = target.attr("data-id");
+        })
+    });
+</script> #}
+{% endblock %}

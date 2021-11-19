@@ -1,0 +1,14 @@
+version: '3'
+services:
+    mysql:
+        image: mysql:8.0.26
+        command: --default-authentication-plugin=mysql_native_password
+        container_name: jobboard_mysql
+        restart: always
+        env_file: .env.db
+        volumes:
+            - d_mysql:/var/lib/mysql
+        network_mode: "host"
+
+volumes:
+    d_mysql:
